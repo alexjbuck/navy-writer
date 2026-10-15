@@ -80,6 +80,34 @@
   }
   .play-overlay:hover .play-button { transform: scale(1.06); }
   .play-button svg { margin-left: 6px; }
+  .end-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: rgba(5, 10, 20, 0.78);
+  }
+  .end-overlay.hidden { display: none; }
+  .end-overlay .download-btn {
+    font-size: 1.15rem;
+    padding: 16px 36px;
+  }
+  .replay-btn {
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--text);
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .replay-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
   .download-row {
     margin-top: 18px;
     display: flex;
@@ -129,6 +157,12 @@
         </svg>
       </div>
     </div>
+    <div class="end-overlay hidden" id="endOverlay">
+      <a class="download-btn" href="Navy_Writer_1.0.html" download>
+        Download Navy Writer
+      </a>
+      <button class="replay-btn" id="replayBtn">Watch again</button>
+    </div>
   </div>
 
   <div class="download-row">
@@ -143,6 +177,8 @@
   <script>
     const video = document.getElementById('demoVideo');
     const overlay = document.getElementById('playOverlay');
+    const endOverlay = document.getElementById('endOverlay');
+    const replayBtn = document.getElementById('replayBtn');
 
     overlay.addEventListener('click', () => {
       video.controls = true;
@@ -155,6 +191,18 @@
     });
     video.addEventListener('play', () => {
       overlay.classList.add('hidden');
+      endOverlay.classList.add('hidden');
+    });
+    video.addEventListener('ended', () => {
+      video.controls = false;
+      endOverlay.classList.remove('hidden');
+    });
+
+    replayBtn.addEventListener('click', () => {
+      endOverlay.classList.add('hidden');
+      video.controls = true;
+      video.currentTime = 0;
+      video.play();
     });
   </script>
 
